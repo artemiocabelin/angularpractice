@@ -80,7 +80,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1>The List</h1>\n<a [routerLink]=\"['users']\">See Other Users</a>\n<a [routerLink]=\"['dashboard']\">Home</a>\n<router-outlet></router-outlet>\n"
+module.exports = "<h1>The List</h1>\n<a [routerLink]=\"['users']\">See Other Users</a>\n<a [routerLink]=\"['dashboard']\">Home</a>\n<button *ngIf=\"loggedIn\" (click)=\"logoutUser()\">Logout</button>\n\n<router-outlet></router-outlet>\n"
 
 /***/ }),
 
@@ -89,28 +89,68 @@ module.exports = "<h1>The List</h1>\n<a [routerLink]=\"['users']\">See Other Use
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__listing_service__ = __webpack_require__("../../../../../src/app/listing.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
 
 var AppComponent = (function () {
-    function AppComponent() {
-        this.title = 'app';
+    function AppComponent(_listingService, _router) {
+        this._listingService = _listingService;
+        this._router = _router;
+        this.setAppComponent();
     }
+    AppComponent.prototype.logoutUser = function () {
+        var _this = this;
+        this._listingService.logoutCurrentUser()
+            .then(function (data) {
+            console.log('successful logout');
+            _this.setAppComponent();
+            _this._router.navigate(['']);
+        })
+            .catch(function (error) {
+            console.log('error logging out');
+            console.log(error);
+        });
+    };
+    AppComponent.prototype.setAppComponent = function () {
+        var _this = this;
+        console.log('setting app component');
+        this._listingService.getCurrentUser()
+            .then(function (data) {
+            console.log('currently logged in');
+            _this.loggedIn = true;
+        })
+            .catch(function (error) {
+            console.log('not logged in');
+            console.log(error);
+            if (error.status === 401) {
+                _this.loggedIn = false;
+            }
+        });
+    };
     return AppComponent;
 }());
 AppComponent = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
+    Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["o" /* Component */])({
         selector: 'app-root',
         template: __webpack_require__("../../../../../src/app/app.component.html"),
         styles: [__webpack_require__("../../../../../src/app/app.component.css")]
-    })
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__listing_service__["a" /* ListingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__listing_service__["a" /* ListingService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_router__["a" /* Router */]) === "function" && _b || Object])
 ], AppComponent);
 
+var _a, _b;
 //# sourceMappingURL=app.component.js.map
 
 /***/ }),
@@ -195,7 +235,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/dashboard/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  dashboard works!\n</p>\n\n"
+module.exports = "<p>\n  dashboard works!\n</p>\n\n<h1>Welcome, {{currentUser.username}}</h1>\n<p>These are all your items</p>\n<ul>\n  <li *ngFor=\"let item of currentUser.items\">{{item.title}}</li>\n</ul>"
 
 /***/ }),
 
@@ -204,7 +244,9 @@ module.exports = "<p>\n  dashboard works!\n</p>\n\n"
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DashboardComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__listing_service__ = __webpack_require__("../../../../../src/app/listing.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -215,22 +257,42 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
 var DashboardComponent = (function () {
-    function DashboardComponent() {
+    function DashboardComponent(_listingService, _router) {
+        var _this = this;
+        this._listingService = _listingService;
+        this._router = _router;
+        this.currentUser = {};
+        this._listingService.getCurrentUser()
+            .then(function (data) {
+            console.log('got then response');
+            _this.currentUser = data;
+            console.log(_this.currentUser);
+        })
+            .catch(function (error) {
+            console.log('got catch response');
+            console.log(error);
+            if (error.status === 401) {
+                _this._router.navigate(['']);
+            }
+        });
     }
     DashboardComponent.prototype.ngOnInit = function () {
     };
     return DashboardComponent;
 }());
 DashboardComponent = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
+    Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["o" /* Component */])({
         selector: 'app-dashboard',
         template: __webpack_require__("../../../../../src/app/dashboard/dashboard.component.html"),
         styles: [__webpack_require__("../../../../../src/app/dashboard/dashboard.component.css")]
     }),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__listing_service__["a" /* ListingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__listing_service__["a" /* ListingService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_router__["a" /* Router */]) === "function" && _b || Object])
 ], DashboardComponent);
 
+var _a, _b;
 //# sourceMappingURL=dashboard.component.js.map
 
 /***/ }),
@@ -265,12 +327,13 @@ module.exports = "<h1>Login to User this App</h1>\n<form (submit)=\"onSubmit()\"
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LandingComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__listing_service__ = __webpack_require__("../../../../../src/app/listing.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__user__ = __webpack_require__("../../../../../src/app/user.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs__ = __webpack_require__("../../../../rxjs/Rx.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__listing_service__ = __webpack_require__("../../../../../src/app/listing.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__user__ = __webpack_require__("../../../../../src/app/user.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs__ = __webpack_require__("../../../../rxjs/Rx.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -285,11 +348,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var LandingComponent = (function () {
-    function LandingComponent(_listingService, _router) {
+    function LandingComponent(_listingService, _router, _appComponent) {
         this._listingService = _listingService;
         this._router = _router;
-        this.user = new __WEBPACK_IMPORTED_MODULE_1__user__["a" /* User */]();
+        this._appComponent = _appComponent;
+        this.user = new __WEBPACK_IMPORTED_MODULE_2__user__["a" /* User */]();
     }
     LandingComponent.prototype.onSubmit = function () {
         var _this = this;
@@ -298,28 +363,29 @@ var LandingComponent = (function () {
             .then(function (response) {
             console.log('got response');
             console.log(response);
+            _this._appComponent.setAppComponent();
             _this._router.navigate(['dashboard']);
         })
             .catch(function (error) {
             console.log('got error');
             console.log(error);
         });
-        this.user = new __WEBPACK_IMPORTED_MODULE_1__user__["a" /* User */]();
+        this.user = new __WEBPACK_IMPORTED_MODULE_2__user__["a" /* User */]();
     };
     LandingComponent.prototype.ngOnInit = function () {
     };
     return LandingComponent;
 }());
 LandingComponent = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["o" /* Component */])({
+    Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["o" /* Component */])({
         selector: 'app-landing',
         template: __webpack_require__("../../../../../src/app/landing/landing.component.html"),
         styles: [__webpack_require__("../../../../../src/app/landing/landing.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__listing_service__["a" /* ListingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__listing_service__["a" /* ListingService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["a" /* Router */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__listing_service__["a" /* ListingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__listing_service__["a" /* ListingService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_router__["a" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__app_component__["a" /* AppComponent */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__app_component__["a" /* AppComponent */]) === "function" && _c || Object])
 ], LandingComponent);
 
-var _a, _b;
+var _a, _b, _c;
 //# sourceMappingURL=landing.component.js.map
 
 /***/ }),
@@ -353,9 +419,20 @@ var ListingService = (function () {
         this._http = _http;
     }
     ListingService.prototype.loginUserButCreateIfNotFound = function (userData) {
-        console.log(userData);
         console.log('service is now sending a post request to server for login');
         return this._http.post('api/users/login', userData)
+            .map(function (response) { return response.json(); })
+            .toPromise();
+    };
+    ListingService.prototype.getCurrentUser = function () {
+        console.log('service getting current User');
+        return this._http.get('api/users/current')
+            .map(function (response) { return response.json(); })
+            .toPromise();
+    };
+    ListingService.prototype.logoutCurrentUser = function () {
+        console.log('service logging user out');
+        return this._http.get('api/users/logout')
             .map(function (response) { return response.json(); })
             .toPromise();
     };

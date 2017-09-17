@@ -1,3 +1,4 @@
+import { AppComponent } from './../app.component';
 import { ListingService } from './../listing.service';
 import { User } from './../user';
 import { Component, OnInit } from '@angular/core';
@@ -11,7 +12,7 @@ import 'rxjs';
 export class LandingComponent implements OnInit {
   user = new User();
 
-  constructor(private _listingService: ListingService, private _router: Router) {
+  constructor(private _listingService: ListingService, private _router: Router, private _appComponent: AppComponent) {
    }
 
    onSubmit() {
@@ -20,6 +21,7 @@ export class LandingComponent implements OnInit {
       .then((response) => {
         console.log('got response');
         console.log(response);
+        this._appComponent.setAppComponent();
         this._router.navigate(['dashboard']);
       })
       .catch((error) => {

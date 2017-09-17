@@ -2,3 +2,8 @@
   dashboard works!
 </p>
 
+<h1>Welcome, {{currentUser.username}}</h1>
+<p>These are all your items</p>
+<ul>
+  <li *ngFor="let item of currentUser.items">{{item.title}}</li>
+</ul>

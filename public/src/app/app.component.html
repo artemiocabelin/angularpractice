@@ -1,4 +1,6 @@
 <h1>The List</h1>
 <a [routerLink]="['users']">See Other Users</a>
 <a [routerLink]="['dashboard']">Home</a>
+<button *ngIf="loggedIn" (click)="logoutUser()">Logout</button>
+
 <router-outlet></router-outlet>

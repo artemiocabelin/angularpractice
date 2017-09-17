@@ -26,10 +26,32 @@ module.exports = {
                             }
                             console.log('created a new user, now saving to session')
                             request.session.username = savedUser.username;
-                            response.json(true);
+                            response.json(savedUser);
                         });
                     }
                 }
             });
     },
+
+    getCurrentUser: (req, res) => {
+        console.log('controller getting current user');
+        User.findOne({username: req.session.username})
+            .populate('items')
+            .exec((error, foundUser) => {
+                if(error) {
+                    console.log('controller error');
+                    console.log(error);
+                    res.json(error);
+                } else {
+                    console.log('found user');
+                    res.json(foundUser);
+                }
+            });
+    },
+    
+    logoutCurrentUser: (req, res) => {
+        console.log('controller logging user out');
+        delete req.session.username;
+        res.json(true);
+    }
 }
