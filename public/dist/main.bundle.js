@@ -235,7 +235,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/dashboard/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  dashboard works!\n</p>\n\n<h1>Welcome, {{currentUser.username}}</h1>\n<p>These are all your items</p>\n<ul>\n  <li *ngFor=\"let item of currentUser.items\">{{item.title}}</li>\n</ul>"
+module.exports = "<p>\n  dashboard works!\n</p>\n\n<h1>Welcome, {{currentUser.username}}</h1>\n<form (submit)=\"onSubmit()\">\n  <label>Title: \n    <input \n      type=\"text\" \n      name=\"title\"\n      minlength=\"5\"\n      [(ngModel)]=\"item.title\"\n      #title = \"ngModel\"\n      />\n  </label>\n  <div style=\"color: red;\" *ngIf=\"!title.valid && (title.dirty || title.touched)\">\n    <p *ngIf=\"title.errors.minlength\">Title must be at least 5 characters long</p> \n  </div>\n  <label>description: \n    <input \n      type=\"text\" \n      name=\"description\"\n      minlength=\"10\"\n      [(ngModel)]=\"item.description\"\n      #description = \"ngModel\"\n      />\n  </label>\n  <div style=\"color: red;\" *ngIf=\"!description.valid && (description.dirty || description.touched)\">\n    <p *ngIf=\"description.errors.minlength\">Description must be at least 10 characters long</p> \n  </div>\n  <input type=\"submit\" value=\"Create item\">\n</form>\n\n<p>These are all your items</p>\n<p>Complete</p>\n<ul>\n  <li *ngFor=\"let item of done\">{{item.title}} - {{item.description}} <button (click)=\"undoItem(item._id)\">Undo</button></li>\n</ul>\n<p>Pending</p>\n<ul>\n  <li *ngFor=\"let item of pending\">{{item.title}} - {{item.description}} <button (click)=\"completeItem(item._id)\">Complete</button></li>\n</ul>"
 
 /***/ }),
 
@@ -244,9 +244,10 @@ module.exports = "<p>\n  dashboard works!\n</p>\n\n<h1>Welcome, {{currentUser.us
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DashboardComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__listing_service__ = __webpack_require__("../../../../../src/app/listing.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__item__ = __webpack_require__("../../../../../src/app/item.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listing_service__ = __webpack_require__("../../../../../src/app/listing.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -259,17 +260,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var DashboardComponent = (function () {
     function DashboardComponent(_listingService, _router) {
-        var _this = this;
         this._listingService = _listingService;
         this._router = _router;
         this.currentUser = {};
+        this.item = new __WEBPACK_IMPORTED_MODULE_0__item__["a" /* Item */]();
+        this.done = [];
+        this.pending = [];
+        this.setDashboardComponent();
+    }
+    DashboardComponent.prototype.setDashboardComponent = function () {
+        var _this = this;
         this._listingService.getCurrentUser()
             .then(function (data) {
             console.log('got then response');
             _this.currentUser = data;
             console.log(_this.currentUser);
+            _this.sortItems(data.items);
         })
             .catch(function (error) {
             console.log('got catch response');
@@ -278,22 +287,102 @@ var DashboardComponent = (function () {
                 _this._router.navigate(['']);
             }
         });
-    }
+    };
+    DashboardComponent.prototype.onSubmit = function () {
+        var _this = this;
+        console.log('submitting item create info');
+        this._listingService.creatItemForUser(this.item)
+            .then(function (data) {
+            console.log('got successful response creating item');
+            console.log(data);
+            _this.setDashboardComponent();
+        })
+            .catch(function (error) {
+            console.log('got error response creating item');
+            console.log(error);
+        });
+        this.item = new __WEBPACK_IMPORTED_MODULE_0__item__["a" /* Item */]();
+    };
     DashboardComponent.prototype.ngOnInit = function () {
+    };
+    DashboardComponent.prototype.sortItems = function (items) {
+        this.done = [];
+        this.pending = [];
+        console.log(items);
+        for (var _i = 0, items_1 = items; _i < items_1.length; _i++) {
+            var item = items_1[_i];
+            if (item.complete) {
+                this.done.push(item);
+            }
+            else {
+                this.pending.push(item);
+            }
+        }
+    };
+    DashboardComponent.prototype.undoItem = function (item_id) {
+        var _this = this;
+        var i_id = { id: item_id };
+        this._listingService.undoItemById(i_id)
+            .then(function (data) {
+            console.log('success');
+            console.log(data);
+            _this.setDashboardComponent();
+        })
+            .catch(function (error) {
+            console.log('error');
+            console.log(error);
+        });
+    };
+    DashboardComponent.prototype.completeItem = function (item_id) {
+        var _this = this;
+        var i_id = { id: item_id };
+        this._listingService.completeItemById(i_id)
+            .then(function (data) {
+            console.log('success');
+            console.log(data);
+            _this.setDashboardComponent();
+        })
+            .catch(function (error) {
+            console.log('error');
+            console.log(error);
+        });
     };
     return DashboardComponent;
 }());
 DashboardComponent = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["o" /* Component */])({
+    Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["o" /* Component */])({
         selector: 'app-dashboard',
         template: __webpack_require__("../../../../../src/app/dashboard/dashboard.component.html"),
         styles: [__webpack_require__("../../../../../src/app/dashboard/dashboard.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__listing_service__["a" /* ListingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__listing_service__["a" /* ListingService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_router__["a" /* Router */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__listing_service__["a" /* ListingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__listing_service__["a" /* ListingService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === "function" && _b || Object])
 ], DashboardComponent);
 
 var _a, _b;
 //# sourceMappingURL=dashboard.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/item.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Item; });
+var Item = (function () {
+    function Item(title, description, complete, creator) {
+        if (title === void 0) { title = ''; }
+        if (description === void 0) { description = ''; }
+        if (complete === void 0) { complete = false; }
+        if (creator === void 0) { creator = ''; }
+        this.title = title;
+        this.description = description;
+        this.complete = complete;
+        this.creator = creator;
+    }
+    return Item;
+}());
+
+//# sourceMappingURL=item.js.map
 
 /***/ }),
 
@@ -433,6 +522,24 @@ var ListingService = (function () {
     ListingService.prototype.logoutCurrentUser = function () {
         console.log('service logging user out');
         return this._http.get('api/users/logout')
+            .map(function (response) { return response.json(); })
+            .toPromise();
+    };
+    ListingService.prototype.creatItemForUser = function (itemData) {
+        console.log('service is now making a request to create Item');
+        return this._http.post('api/items/create', itemData)
+            .map(function (response) { return response.json(); })
+            .toPromise();
+    };
+    ListingService.prototype.undoItemById = function (itemId) {
+        console.log('service is now making a request to undo Item');
+        return this._http.post('api/items/undo', itemId)
+            .map(function (response) { return response.json(); })
+            .toPromise();
+    };
+    ListingService.prototype.completeItemById = function (itemId) {
+        console.log('service is now making a request to complete Item');
+        return this._http.post('api/items/complete', itemId)
             .map(function (response) { return response.json(); })
             .toPromise();
     };

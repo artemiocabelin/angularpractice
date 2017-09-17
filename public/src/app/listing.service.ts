@@ -28,4 +28,25 @@ export class ListingService {
       .map(response => response.json())
       .toPromise();
   }
+
+  creatItemForUser(itemData) {
+    console.log('service is now making a request to create Item');
+    return this._http.post('api/items/create', itemData)
+      .map(response => response.json())
+      .toPromise();
+  }
+
+  undoItemById(itemId) {
+    console.log('service is now making a request to undo Item');
+    return this._http.post('api/items/undo', itemId)
+      .map(response => response.json())
+      .toPromise();
+  }
+
+  completeItemById(itemId) {
+    console.log('service is now making a request to complete Item');
+    return this._http.post('api/items/complete', itemId)
+      .map(response => response.json())
+      .toPromise();
+  }
 }

@@ -3,7 +3,40 @@
 </p>
 
 <h1>Welcome, {{currentUser.username}}</h1>
+<form (submit)="onSubmit()">
+  <label>Title: 
+    <input 
+      type="text" 
+      name="title"
+      minlength="5"
+      [(ngModel)]="item.title"
+      #title = "ngModel"
+      />
+  </label>
+  <div style="color: red;" *ngIf="!title.valid && (title.dirty || title.touched)">
+    <p *ngIf="title.errors.minlength">Title must be at least 5 characters long</p> 
+  </div>
+  <label>description: 
+    <input 
+      type="text" 
+      name="description"
+      minlength="10"
+      [(ngModel)]="item.description"
+      #description = "ngModel"
+      />
+  </label>
+  <div style="color: red;" *ngIf="!description.valid && (description.dirty || description.touched)">
+    <p *ngIf="description.errors.minlength">Description must be at least 10 characters long</p> 
+  </div>
+  <input type="submit" value="Create item">
+</form>
+
 <p>These are all your items</p>
+<p>Complete</p>
 <ul>
-  <li *ngFor="let item of currentUser.items">{{item.title}}</li>
+  <li *ngFor="let item of done">{{item.title}} - {{item.description}} <button (click)="undoItem(item._id)">Undo</button></li>
+</ul>
+<p>Pending</p>
+<ul>
+  <li *ngFor="let item of pending">{{item.title}} - {{item.description}} <button (click)="completeItem(item._id)">Complete</button></li>
 </ul>

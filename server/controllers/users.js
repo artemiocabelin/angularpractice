@@ -1,6 +1,7 @@
 // alter title of file as needed. Don't forget to change dependent files as well
 let mongoose = require('mongoose');
 let User = mongoose.model('User'); // change as needed
+let Item = mongoose.model('Item'); // change as needed
 
 module.exports = {
     loginUserAndCreateIfNotFound : (request, response) => {
