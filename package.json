@@ -1,0 +1,20 @@
+{
+  "name": "belt_practice",
+  "version": "1.0.0",
+  "description": "* Have at least 2 terminals up and running * *make sure to commit changes as needed.* * Before starting:      * Set up server folder.     * Do step 1, 2, 3 of Angular Workflow Section     * Then Do Step 0, 1, 2, 3 of Node Workflow Section     * Then Do a Test Launch using the steps below. #### Terminal 1 ``` cd public ng build -w ``` #### Terminal 2 ``` cd .. nodemon server.js ``` ---",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "ejs": "^2.5.7",
+    "express": "^4.15.4",
+    "express-session": "^1.15.5",
+    "mongoose": "^4.11.11"
+  }
+}

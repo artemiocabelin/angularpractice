@@ -1,14 +1,12 @@
 let mongoose = require('mongoose');
 let path = require('path');
-let Something = mongoose.model('Something'); // alter as needed
-let somethings = require('../controllers/somethings.js') // alter
+let User = mongoose.model('User'); // alter as needed
+let users = require('../controllers/users.js') // alter
 
 module.exports = function(app) {
     // route handlers goes here
     // sample
-    app.get('/', function(request, response) {
-        somethings.showSomethings(request,response);
-    })
+    app.get('/api', users.showSomethings)
     app.all("*", (req,res,next) => {
         res.sendFile(path.resolve("./public/dist/index.html"))
     });

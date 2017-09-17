@@ -2,15 +2,15 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-// const session = require('express-session'); // check if needed
+const session = require('express-session'); // check if needed
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ extended: true }));
 app.use(express.static(path.join(__dirname, "./public/dist")));
 
-// const sessionConfig = {
-//     secret: 'SecretKey', // change secret key as needed
+const sessionConfig = {
+    secret: 'SecretKey', // change secret key as needed
 //     resave: false, // Don't resave session if no changes were made
 //     saveUninitialized: true, // Don't save session if there was nothing initialized
 //     name: 'myCookie', // Sets a custom cookie name
@@ -19,8 +19,8 @@ app.use(express.static(path.join(__dirname, "./public/dist")));
 //         httpOnly: false, // forces the cookie to only be used over http
 //         maxAge: 3600000
 //     }
-// }
-// app.use(session(sessionConfig));  // change secret key as needed
+}
+app.use(session(sessionConfig));  // change secret key as needed
 
 
 require('./server/config/mongoose.js');
