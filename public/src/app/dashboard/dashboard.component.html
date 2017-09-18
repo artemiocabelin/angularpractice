@@ -34,9 +34,14 @@
 <p>These are all your items</p>
 <p>Complete</p>
 <ul>
-  <li *ngFor="let item of done">{{item.title}} - {{item.description}} <button (click)="undoItem(item._id)">Undo</button></li>
+  <li *ngFor="let item of done">{{item.title}} - {{item.description}} <button (click)="undoItem(item._id)">Undo</button><button (click)="removeItem(item._id)">Remove</button></li>
 </ul>
 <p>Pending</p>
 <ul>
-  <li *ngFor="let item of pending">{{item.title}} - {{item.description}} <button (click)="completeItem(item._id)">Complete</button></li>
+  <li *ngFor="let item of pending">{{item.title}} - {{item.description}} <button (click)="completeItem(item._id)">Complete</button><button (click)="removeItem(item._id)">Remove</button></li>
+</ul>
+
+<p>Other users:</p>
+<ul>
+  <li *ngFor="let user of otherUsers"><a [routerLink]="['/users', user._id]">{{user.username}}</a></li>
 </ul>

@@ -54,5 +54,31 @@ module.exports = {
         console.log('controller logging user out');
         delete req.session.username;
         res.json(true);
+    },
+
+    getAllUsers: (req, res) => {
+        console.log('controller getting all users');
+        User.find({}).exec((error, users) => {
+            if (error) {
+                console.log('error getting all users')
+                console.log(error);
+            }else {
+                console.log('success getting all users');
+                res.json(users);
+            }
+        })
+    },
+
+    getUserById: (req, res) => {
+        console.log('server getting user by id');
+        User.findOne({_id: req.params.id}).populate('items').exec((error, user) => {
+            if (error) {
+                console.log('error getting a user')
+                console.log(error);
+            } else {
+                console.log('success getting a user');
+                res.json(user);
+            }
+        })
     }
 }

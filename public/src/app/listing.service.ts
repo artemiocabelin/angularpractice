@@ -8,6 +8,13 @@ export class ListingService {
 
   constructor(private _http: Http) { }
 
+  getUsers() {
+    console.log('service is now sending a request to get all users');
+    return this._http.get('api/users')
+      .map(response => response.json())
+      .toPromise();
+  }
+
   loginUserButCreateIfNotFound(userData) {
     console.log('service is now sending a post request to server for login');
     return this._http.post('api/users/login', userData)
@@ -18,6 +25,12 @@ export class ListingService {
   getCurrentUser() {
     console.log('service getting current User');
     return this._http.get('api/users/current')
+      .map(response => response.json())
+      .toPromise();
+  }
+
+  retrieveUserById(userId) {
+    return this._http.get('api/users/' + userId)
       .map(response => response.json())
       .toPromise();
   }
@@ -46,6 +59,13 @@ export class ListingService {
   completeItemById(itemId) {
     console.log('service is now making a request to complete Item');
     return this._http.post('api/items/complete', itemId)
+      .map(response => response.json())
+      .toPromise();
+  }
+
+  removeItemById(itemId) {
+    console.log('service is now making a request to complete Item');
+    return this._http.post('api/items/remove', itemId)
       .map(response => response.json())
       .toPromise();
   }

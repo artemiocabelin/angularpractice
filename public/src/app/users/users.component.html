@@ -1,3 +1,13 @@
 <p>
   users works!
 </p>
+<h1>{{user.username}}'s page</h1>
+
+<p>This all of {{user.username}}'s items</p>
+<ul>
+  <li *ngFor="let item of user.items">{{item.title}} - {{item.description}}</li>
+</ul>
+
+<ul>
+  <li *ngFor="let buser of otherUsers"><a [routerLink]="['/users', buser._id]">{{buser.username}}</a></li>
+</ul>

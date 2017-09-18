@@ -19,10 +19,13 @@ module.exports = function(app) {
     app.post('/api/users/login', users.loginUserAndCreateIfNotFound);
     app.use(authenticate);
     app.get('/api/users/current', users.getCurrentUser);
+    app.get('/api/users', users.getAllUsers);
     app.get('/api/users/logout', users.logoutCurrentUser);
+    app.get('/api/users/:id', users.getUserById);
     app.post('/api/items/create', items.createItemForUser);
     app.post('/api/items/undo', items.undoItemForUser);
     app.post('/api/items/complete', items.completeItemForUser);
+    app.post('/api/items/remove', items.removeItemForUser);
     app.all("*", (req,res,next) => {
         res.sendFile(path.resolve("./public/dist/index.html"))
     });

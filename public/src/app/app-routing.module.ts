@@ -7,7 +7,7 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: LandingComponent },
   { path: 'dashboard', pathMatch: 'full', component: DashboardComponent },
-  { path: 'users', pathMatch: 'full', component: UsersComponent },
+  { path: 'users/:uid', pathMatch: 'full', component: UsersComponent },
 ];
 
 @NgModule({

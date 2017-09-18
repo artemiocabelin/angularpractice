@@ -56,4 +56,18 @@ module.exports = {
             }
         })
     },
+
+    removeItemForUser: (req, res) => {
+        console.log('server undoing item');
+        console.log(req.body)
+        Item.remove({_id: req.body.id}, (error) => {
+            if (error) {
+                console.log('something went wrong');
+                console.log(error);
+            } else {
+                console.log('server successfuly removed item')
+                res.json(true);
+            }
+        })
+    },
 }

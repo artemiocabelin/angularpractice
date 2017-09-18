@@ -41,7 +41,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var routes = [
     { path: '', pathMatch: 'full', component: __WEBPACK_IMPORTED_MODULE_1__landing_landing_component__["a" /* LandingComponent */] },
     { path: 'dashboard', pathMatch: 'full', component: __WEBPACK_IMPORTED_MODULE_2__dashboard_dashboard_component__["a" /* DashboardComponent */] },
-    { path: 'users', pathMatch: 'full', component: __WEBPACK_IMPORTED_MODULE_0__users_users_component__["a" /* UsersComponent */] },
+    { path: 'users/:uid', pathMatch: 'full', component: __WEBPACK_IMPORTED_MODULE_0__users_users_component__["a" /* UsersComponent */] },
 ];
 var AppRoutingModule = (function () {
     function AppRoutingModule() {
@@ -50,8 +50,8 @@ var AppRoutingModule = (function () {
 }());
 AppRoutingModule = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["M" /* NgModule */])({
-        imports: [__WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* RouterModule */].forRoot(routes)],
-        exports: [__WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* RouterModule */]]
+        imports: [__WEBPACK_IMPORTED_MODULE_4__angular_router__["c" /* RouterModule */].forRoot(routes)],
+        exports: [__WEBPACK_IMPORTED_MODULE_4__angular_router__["c" /* RouterModule */]]
     })
 ], AppRoutingModule);
 
@@ -80,7 +80,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1>The List</h1>\n<a [routerLink]=\"['users']\">See Other Users</a>\n<a [routerLink]=\"['dashboard']\">Home</a>\n<button *ngIf=\"loggedIn\" (click)=\"logoutUser()\">Logout</button>\n\n<router-outlet></router-outlet>\n"
+module.exports = "<h1>The List</h1>\n<a [routerLink]=\"['dashboard']\">Home</a>\n<button *ngIf=\"loggedIn\" (click)=\"logoutUser()\">Logout</button>\n\n<router-outlet></router-outlet>\n"
 
 /***/ }),
 
@@ -147,7 +147,7 @@ AppComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/app.component.html"),
         styles: [__webpack_require__("../../../../../src/app/app.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__listing_service__["a" /* ListingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__listing_service__["a" /* ListingService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_router__["a" /* Router */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__listing_service__["a" /* ListingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__listing_service__["a" /* ListingService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_router__["b" /* Router */]) === "function" && _b || Object])
 ], AppComponent);
 
 var _a, _b;
@@ -235,7 +235,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/dashboard/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  dashboard works!\n</p>\n\n<h1>Welcome, {{currentUser.username}}</h1>\n<form (submit)=\"onSubmit()\">\n  <label>Title: \n    <input \n      type=\"text\" \n      name=\"title\"\n      minlength=\"5\"\n      [(ngModel)]=\"item.title\"\n      #title = \"ngModel\"\n      />\n  </label>\n  <div style=\"color: red;\" *ngIf=\"!title.valid && (title.dirty || title.touched)\">\n    <p *ngIf=\"title.errors.minlength\">Title must be at least 5 characters long</p> \n  </div>\n  <label>description: \n    <input \n      type=\"text\" \n      name=\"description\"\n      minlength=\"10\"\n      [(ngModel)]=\"item.description\"\n      #description = \"ngModel\"\n      />\n  </label>\n  <div style=\"color: red;\" *ngIf=\"!description.valid && (description.dirty || description.touched)\">\n    <p *ngIf=\"description.errors.minlength\">Description must be at least 10 characters long</p> \n  </div>\n  <input type=\"submit\" value=\"Create item\">\n</form>\n\n<p>These are all your items</p>\n<p>Complete</p>\n<ul>\n  <li *ngFor=\"let item of done\">{{item.title}} - {{item.description}} <button (click)=\"undoItem(item._id)\">Undo</button></li>\n</ul>\n<p>Pending</p>\n<ul>\n  <li *ngFor=\"let item of pending\">{{item.title}} - {{item.description}} <button (click)=\"completeItem(item._id)\">Complete</button></li>\n</ul>"
+module.exports = "<p>\n  dashboard works!\n</p>\n\n<h1>Welcome, {{currentUser.username}}</h1>\n<form (submit)=\"onSubmit()\">\n  <label>Title: \n    <input \n      type=\"text\" \n      name=\"title\"\n      minlength=\"5\"\n      [(ngModel)]=\"item.title\"\n      #title = \"ngModel\"\n      />\n  </label>\n  <div style=\"color: red;\" *ngIf=\"!title.valid && (title.dirty || title.touched)\">\n    <p *ngIf=\"title.errors.minlength\">Title must be at least 5 characters long</p> \n  </div>\n  <label>description: \n    <input \n      type=\"text\" \n      name=\"description\"\n      minlength=\"10\"\n      [(ngModel)]=\"item.description\"\n      #description = \"ngModel\"\n      />\n  </label>\n  <div style=\"color: red;\" *ngIf=\"!description.valid && (description.dirty || description.touched)\">\n    <p *ngIf=\"description.errors.minlength\">Description must be at least 10 characters long</p> \n  </div>\n  <input type=\"submit\" value=\"Create item\">\n</form>\n\n<p>These are all your items</p>\n<p>Complete</p>\n<ul>\n  <li *ngFor=\"let item of done\">{{item.title}} - {{item.description}} <button (click)=\"undoItem(item._id)\">Undo</button><button (click)=\"removeItem(item._id)\">Remove</button></li>\n</ul>\n<p>Pending</p>\n<ul>\n  <li *ngFor=\"let item of pending\">{{item.title}} - {{item.description}} <button (click)=\"completeItem(item._id)\">Complete</button><button (click)=\"removeItem(item._id)\">Remove</button></li>\n</ul>\n\n<p>Other users:</p>\n<ul>\n  <li *ngFor=\"let user of otherUsers\"><a [routerLink]=\"['/users', user._id]\">{{user.username}}</a></li>\n</ul>"
 
 /***/ }),
 
@@ -265,10 +265,11 @@ var DashboardComponent = (function () {
     function DashboardComponent(_listingService, _router) {
         this._listingService = _listingService;
         this._router = _router;
-        this.currentUser = {};
         this.item = new __WEBPACK_IMPORTED_MODULE_0__item__["a" /* Item */]();
         this.done = [];
         this.pending = [];
+        this.allUsers = [];
+        this.otherUsers = [];
         this.setDashboardComponent();
     }
     DashboardComponent.prototype.setDashboardComponent = function () {
@@ -279,6 +280,7 @@ var DashboardComponent = (function () {
             _this.currentUser = data;
             console.log(_this.currentUser);
             _this.sortItems(data.items);
+            _this.getAllUsers();
         })
             .catch(function (error) {
             console.log('got catch response');
@@ -286,6 +288,20 @@ var DashboardComponent = (function () {
             if (error.status === 401) {
                 _this._router.navigate(['']);
             }
+        });
+    };
+    DashboardComponent.prototype.getAllUsers = function () {
+        var _this = this;
+        this._listingService.getUsers()
+            .then(function (data) {
+            console.log('got then response for get users');
+            _this.allUsers = data;
+            console.log(_this.allUsers);
+            _this.sortUsers(_this.allUsers);
+        })
+            .catch(function (error) {
+            console.log('got catch response for get users');
+            console.log(error);
         });
     };
     DashboardComponent.prototype.onSubmit = function () {
@@ -347,6 +363,30 @@ var DashboardComponent = (function () {
             console.log(error);
         });
     };
+    DashboardComponent.prototype.removeItem = function (item_id) {
+        var _this = this;
+        var i_id = { id: item_id };
+        this._listingService.removeItemById(i_id)
+            .then(function (data) {
+            console.log('success');
+            console.log(data);
+            _this.setDashboardComponent();
+        })
+            .catch(function (error) {
+            console.log('error');
+            console.log(error);
+        });
+    };
+    DashboardComponent.prototype.sortUsers = function (users) {
+        this.otherUsers = [];
+        for (var _i = 0, users_1 = users; _i < users_1.length; _i++) {
+            var user = users_1[_i];
+            if (user.username !== this.currentUser.username) {
+                this.otherUsers.push(user);
+            }
+        }
+        console.log(this.otherUsers);
+    };
     return DashboardComponent;
 }());
 DashboardComponent = __decorate([
@@ -355,7 +395,7 @@ DashboardComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/dashboard/dashboard.component.html"),
         styles: [__webpack_require__("../../../../../src/app/dashboard/dashboard.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__listing_service__["a" /* ListingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__listing_service__["a" /* ListingService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__listing_service__["a" /* ListingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__listing_service__["a" /* ListingService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _b || Object])
 ], DashboardComponent);
 
 var _a, _b;
@@ -471,7 +511,7 @@ LandingComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/landing/landing.component.html"),
         styles: [__webpack_require__("../../../../../src/app/landing/landing.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__listing_service__["a" /* ListingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__listing_service__["a" /* ListingService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_router__["a" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__app_component__["a" /* AppComponent */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__app_component__["a" /* AppComponent */]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__listing_service__["a" /* ListingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__listing_service__["a" /* ListingService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__app_component__["a" /* AppComponent */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__app_component__["a" /* AppComponent */]) === "function" && _c || Object])
 ], LandingComponent);
 
 var _a, _b, _c;
@@ -507,6 +547,12 @@ var ListingService = (function () {
     function ListingService(_http) {
         this._http = _http;
     }
+    ListingService.prototype.getUsers = function () {
+        console.log('service is now sending a request to get all users');
+        return this._http.get('api/users')
+            .map(function (response) { return response.json(); })
+            .toPromise();
+    };
     ListingService.prototype.loginUserButCreateIfNotFound = function (userData) {
         console.log('service is now sending a post request to server for login');
         return this._http.post('api/users/login', userData)
@@ -516,6 +562,11 @@ var ListingService = (function () {
     ListingService.prototype.getCurrentUser = function () {
         console.log('service getting current User');
         return this._http.get('api/users/current')
+            .map(function (response) { return response.json(); })
+            .toPromise();
+    };
+    ListingService.prototype.retrieveUserById = function (userId) {
+        return this._http.get('api/users/' + userId)
             .map(function (response) { return response.json(); })
             .toPromise();
     };
@@ -543,6 +594,12 @@ var ListingService = (function () {
             .map(function (response) { return response.json(); })
             .toPromise();
     };
+    ListingService.prototype.removeItemById = function (itemId) {
+        console.log('service is now making a request to complete Item');
+        return this._http.post('api/items/remove', itemId)
+            .map(function (response) { return response.json(); })
+            .toPromise();
+    };
     return ListingService;
 }());
 ListingService = __decorate([
@@ -561,9 +618,17 @@ var _a;
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return User; });
 var User = (function () {
-    function User(username) {
+    function User(_id, username, items, createdAt, updatedAt) {
+        if (_id === void 0) { _id = null; }
         if (username === void 0) { username = ''; }
+        if (items === void 0) { items = []; }
+        if (createdAt === void 0) { createdAt = new Date(); }
+        if (updatedAt === void 0) { updatedAt = new Date(); }
+        this._id = _id;
         this.username = username;
+        this.items = items;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
     return User;
 }());
@@ -593,7 +658,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/users/users.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  users works!\n</p>\n"
+module.exports = "<p>\n  users works!\n</p>\n<h1>{{user.username}}'s page</h1>\n\n<p>This all of {{user.username}}'s items</p>\n<ul>\n  <li *ngFor=\"let item of user.items\">{{item.title}} - {{item.description}}</li>\n</ul>\n\n<ul>\n  <li *ngFor=\"let buser of otherUsers\"><a [routerLink]=\"['/users', buser._id]\">{{buser.username}}</a></li>\n</ul>"
 
 /***/ }),
 
@@ -602,7 +667,11 @@ module.exports = "<p>\n  users works!\n</p>\n"
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UsersComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__listing_service__ = __webpack_require__("../../../../../src/app/listing.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_switchMap__ = __webpack_require__("../../../../rxjs/add/operator/switchMap.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_switchMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_switchMap__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -613,22 +682,88 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
+
 var UsersComponent = (function () {
-    function UsersComponent() {
+    function UsersComponent(_route, _listingService, _router) {
+        this._route = _route;
+        this._listingService = _listingService;
+        this._router = _router;
+        this.otherUsers = [];
+        this.allUsers = [];
+        this.setCurrentUser();
     }
     UsersComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.subscription = this._route.paramMap
+            .switchMap(function (params) {
+            console.log('got params id: ' + params.get('uid'));
+            return _this._listingService.retrieveUserById(params.get('uid'));
+        }).subscribe(function (user) {
+            _this.user = user;
+            console.log(_this.user);
+            if (_this.user.username === _this.currentUser.username) {
+                _this._router.navigate(['/dashboard']);
+            }
+            _this.getAllUsers();
+        });
+    };
+    UsersComponent.prototype.getAllUsers = function () {
+        var _this = this;
+        this._listingService.getUsers()
+            .then(function (data) {
+            console.log('got then response for get users');
+            _this.allUsers = data;
+            console.log(_this.allUsers);
+            _this.sortUsers(_this.allUsers);
+        })
+            .catch(function (error) {
+            console.log('got catch response for get users');
+            console.log(error);
+        });
+    };
+    UsersComponent.prototype.sortUsers = function (users) {
+        this.otherUsers = [];
+        for (var _i = 0, users_1 = users; _i < users_1.length; _i++) {
+            var buser = users_1[_i];
+            if (buser.username !== this.user.username) {
+                this.otherUsers.push(buser);
+            }
+        }
+        console.log(this.otherUsers);
+    };
+    UsersComponent.prototype.ngOnDestroy = function () {
+        this.subscription.unsubscribe();
+    };
+    UsersComponent.prototype.setCurrentUser = function () {
+        var _this = this;
+        this._listingService.getCurrentUser()
+            .then(function (data) {
+            console.log('got then response');
+            _this.currentUser = data;
+            console.log(_this.currentUser);
+        })
+            .catch(function (error) {
+            console.log('got catch response');
+            console.log(error);
+            if (error.status === 401) {
+                _this._router.navigate(['']);
+            }
+        });
     };
     return UsersComponent;
 }());
 UsersComponent = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["o" /* Component */])({
         selector: 'app-users',
         template: __webpack_require__("../../../../../src/app/users/users.component.html"),
         styles: [__webpack_require__("../../../../../src/app/users/users.component.css")]
     }),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* ActivatedRoute */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__listing_service__["a" /* ListingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__listing_service__["a" /* ListingService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === "function" && _c || Object])
 ], UsersComponent);
 
+var _a, _b, _c;
 //# sourceMappingURL=users.component.js.map
 
 /***/ }),
